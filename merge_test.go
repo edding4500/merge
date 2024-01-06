@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// Test if the intervals are merged using
+// hard coded intervals.
 func TestMergeWithFixedIntervals(t *testing.T) {
 	i1, _ := interval.New(1, 5)
 	i2, _ := interval.New(13, 18)
@@ -41,6 +43,8 @@ func TestMergeWithFixedIntervals(t *testing.T) {
 	}
 }
 
+// Test if the intervals are merged when theire
+// Start elements are sorted in descending order.
 func TestMergeIntervalWithInvertedIntervals(t *testing.T) {
 	a, _ := interval.New(1, 3)
 	b, _ := interval.New(4, 6)
@@ -60,9 +64,9 @@ func TestMergeIntervalWithInvertedIntervals(t *testing.T) {
 func TestMergeIntervalIfOverlap(t *testing.T) {
 	a, _ := interval.New(1, 3)
 	b, _ := interval.New(2, 4)
-	merged, ok := MergeIntervalsIfOverlap(*a, *b)
-	if !ok {
-		t.Errorf("Expected overlap, got none")
+	merged, error := MergeIntervalsIfOverlap(*a, *b)
+	if error != nil {
+		t.Errorf("Expected overlap but merging failed")
 	}
 
 	if merged.Start != 1 {
@@ -74,12 +78,14 @@ func TestMergeIntervalIfOverlap(t *testing.T) {
 	}
 }
 
+// Test if the intervals are not merged when they are
+// not overlapping.
 func TestMergeIntervalIfNoOverlap(t *testing.T) {
 	a, _ := interval.New(1, 3)
 	b, _ := interval.New(4, 6)
 	merged, error := MergeIntervalsIfOverlap(*a, *b)
-	if error {
-		t.Errorf("Expected no overlap, got one")
+	if error == nil {
+		t.Errorf("Expected no overlap but merging succeeded")
 	}
 
 	if merged.Start != 0 {
@@ -91,10 +97,33 @@ func TestMergeIntervalIfNoOverlap(t *testing.T) {
 	}
 }
 
+// Test if intervals are merged when they are identical
 func TestMergeWithCollidingIntervals(t *testing.T) {
+	a, _ := interval.New(1, 3)
+	b, _ := interval.New(1, 3)
+	c, _ := interval.New(1, 3)
+	intervals := []interval.Interval{*a, *b, *c}
+	merged, error := Merge(intervals)
 
+	if error != nil {
+		t.Errorf("Error while merging intervals")
+	}
+
+	if len(merged) != 1 {
+		t.Errorf("Expected 1 interval, got %d", len(merged))
+	}
+
+	if merged[0].Start != 1 {
+		t.Errorf("Expected start to be 1, got %d", merged[0].Start)
+	}
+
+	if merged[0].End != 3 {
+		t.Errorf("Expected end to be 3, got %d", merged[0].End)
+	}
 }
 
+// Test if the intervals are merged when they have
+// identical start elements
 func TestMergeWithIntervalsWithIdenticalStartElements(t *testing.T) {
 	a, _ := interval.New(3, 6)
 	b, _ := interval.New(3, 12)
@@ -106,5 +135,24 @@ func TestMergeWithIntervalsWithIdenticalStartElements(t *testing.T) {
 		t.Errorf("Error while merging intervals")
 	}
 
-	println(merged)
+	if len(merged) != 1 {
+		t.Errorf("Expected 1 interval, got %d", len(merged))
+	}
+}
+
+// Test merging of intervals with negative numbers
+func TestMergeWithIntervalsWithNegativeNumbers(t *testing.T) {
+	a, _ := interval.New(-3, 6)
+	b, _ := interval.New(-3, 12)
+	c, _ := interval.New(-3, 5)
+	intervals := []interval.Interval{*a, *b, *c}
+	merged, error := Merge(intervals)
+
+	if error != nil {
+		t.Errorf("Error while merging intervals")
+	}
+
+	if len(merged) != 1 {
+		t.Errorf("Expected 1 interval, got %d", len(merged))
+	}
 }

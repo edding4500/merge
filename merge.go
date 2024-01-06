@@ -1,6 +1,7 @@
 package merge
 
 import (
+	"errors"
 	"intervals/merge/interval"
 	"sort"
 )
@@ -27,6 +28,8 @@ func Merge(intervals []interval.Interval) ([]interval.Interval, error) {
 	* have to iterate once over all intervals and no longer
 	* have to compare each interval with each other interval.
 	* This sorting step thus avoids quadratic runtime.
+	*	This step introduces **invariant A**: no remaining intervals
+	* after the current interval can be merged with the last interval.
 	*
 	* Notes for discussion: sort.Slice is mentioned to be not stable.
 	* Do we need stable sorting here? No, we dont, because the
@@ -39,7 +42,10 @@ func Merge(intervals []interval.Interval) ([]interval.Interval, error) {
 	/**
 	*	We keep list of all merged intervals. This adds to the
 	* memory footprint of the algorithm: in the worst case for
-	* an input if size n we need twice the memory.
+	* an input if size n we need twice the memory. We could
+	* improve here by merging in place or dropping the merged
+	* intervals from the list of intervals. For now, I keep
+	* it simple.
 	 */
 	merged := []interval.Interval{intervals[0]}
 	for _, currentInterval := range intervals[1:] {
@@ -77,6 +83,17 @@ func Merge(intervals []interval.Interval) ([]interval.Interval, error) {
 	return merged, nil
 }
 
+/**
+*
+*	`MergeInterval` takes two intervals and returns a merged interval
+*	if the two intervals overlap. In case of an error, the returned
+*	error object reflects the error and is not nil.
+*
+* @a: The first interval
+* @b: The second interval
+* @return: A merged interval and an error object.
+*
+ */
 func MergeInterval(a, b interval.Interval) (*interval.Interval, error) {
 	return interval.New(
 		min(a.Start, b.Start),
@@ -84,13 +101,20 @@ func MergeInterval(a, b interval.Interval) (*interval.Interval, error) {
 	)
 }
 
-func MergeIntervalsIfOverlap(a, b interval.Interval) (interval.Interval, bool) {
+// Takes two intervals and returns a merged interval
+// if the two intervals overlap.
+//
+// In case of an error, the returned
+// error object reflects the error and is not nil.
+//
+// If the intervals do not overlap, the returned
+// error object reflects the error and is not nil.
+// The returned interval is empty.
+func MergeIntervalsIfOverlap(a, b interval.Interval) (interval.Interval, error) {
 	if a.Overlaps(b) {
 		merged, err := MergeInterval(a, b)
-		if err != nil {
-			panic(err)
-		}
-		return *merged, true
+		return *merged, err
 	}
-	return interval.Interval{}, false
+
+	return interval.Interval{}, errors.New("Intervals do not overlap")
 }
