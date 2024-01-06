@@ -62,21 +62,7 @@ I interpreted the term `robustness` as the ability of a system to behave in a pr
 
 The solution is robust to the following cases:
 
-- Empty intervals
-- Intervals with negative values
-- Intervals with zero values
-- Intervals with negative and zero values
-- Intervals with positive values
-- Intervals with positive and zero values
-- Intervals with positive and negative values
-- Intervals with positive, negative and zero values
-- Intervals with positive, negative and zero values in different orders
-- Intervals with overlapping values
-- Intervals with overlapping values in different orders
-- Intervals with overlapping values and negative values
-- Intervals with overlapping values and zero values
-- Intervals with overlapping values and positive values
-- Intervals with overlapping values, negative values and zero values
+// TODO
 
 ### How can robustness be guaranteed for large inputs?
 
