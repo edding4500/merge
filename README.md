@@ -60,9 +60,17 @@ The memory complexity is O(n) because the algorithm uses a slice of intervals to
 
 I interpreted the term `robustness` as the ability of a system to behave in a predictable manner despite unforeseeable circumstances. In this case, the system is the interval merging algorithm and the unforeseeable circumstances are the different cases that the algorithm has to handle.
 
-The solution is robust to the following cases:
+Robustness was tested for the following cases:
+- empty input
+- input with one interval
+- input with intervals that do not overlap
+- input with intervals that overlap
+- input with intervals that overlap and are not sorted by their start value
+- input with identical intervals
+- input with intervals that share identical start values
+- input with intervals including negative values
 
-// TODO
+Both `Merge` and the `Interval` struct were tested for robustness. The tests can be found in the `merge_test.go` and `interval_test.go` files. Interval tests include tests for the `New` constructor function and the `Overlaps` method.
 
 ### How can robustness be guaranteed for large inputs?
 

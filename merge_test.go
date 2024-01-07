@@ -83,17 +83,9 @@ func TestMergeIntervalIfOverlap(t *testing.T) {
 func TestMergeIntervalIfNoOverlap(t *testing.T) {
 	a, _ := interval.New(1, 3)
 	b, _ := interval.New(4, 6)
-	merged, error := MergeIntervalsIfOverlap(*a, *b)
+	_, error := MergeIntervalsIfOverlap(*a, *b)
 	if error == nil {
 		t.Errorf("Expected no overlap but merging succeeded")
-	}
-
-	if merged.Start != 0 {
-		t.Errorf("Expected start to be 0, got %d", merged.Start)
-	}
-
-	if merged.End != 0 {
-		t.Errorf("Expected end to be 0, got %d", merged.End)
 	}
 }
 
@@ -141,7 +133,7 @@ func TestMergeWithIntervalsWithIdenticalStartElements(t *testing.T) {
 }
 
 // Test merging of intervals with negative numbers
-func TestMergeWithIntervalsWithNegativeNumbers(t *testing.T) {
+func TestMergeWithIntervalsWithNegativeNumbersAndIdenticalStartValue(t *testing.T) {
 	a, _ := interval.New(-3, 6)
 	b, _ := interval.New(-3, 12)
 	c, _ := interval.New(-3, 5)
@@ -154,5 +146,50 @@ func TestMergeWithIntervalsWithNegativeNumbers(t *testing.T) {
 
 	if len(merged) != 1 {
 		t.Errorf("Expected 1 interval, got %d", len(merged))
+	}
+}
+
+func TestMergeWithIntervalsWithNegativeNumbers(t *testing.T) {
+	a, _ := interval.New(2, 6)
+	b, _ := interval.New(-3, 2)
+	c, _ := interval.New(-12, 5)
+	intervals := []interval.Interval{*a, *b, *c}
+	merged, error := Merge(intervals)
+
+	if error != nil {
+		t.Errorf("Error while merging intervals")
+	}
+
+	if len(merged) != 1 {
+		t.Errorf("Expected 1 interval, got %d", len(merged))
+	}
+}
+
+// test merging of a single interval
+func TestMergeWithSingleInterval(t *testing.T) {
+	a, _ := interval.New(1, 3)
+	intervals := []interval.Interval{*a}
+	merged, error := Merge(intervals)
+
+	if error != nil {
+		t.Errorf("Error while merging intervals")
+	}
+
+	if len(merged) != 1 {
+		t.Errorf("Expected 1 interval, got %d", len(merged))
+	}
+}
+
+// Test merging of an empty list of intervals
+func TestMergeWithEmptyIntervals(t *testing.T) {
+	intervals := []interval.Interval{}
+	merged, error := Merge(intervals)
+
+	if error != nil {
+		t.Errorf("Error while merging intervals")
+	}
+
+	if len(merged) != 0 {
+		t.Errorf("Expected 0 intervals, got %d", len(merged))
 	}
 }

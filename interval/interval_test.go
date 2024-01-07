@@ -59,3 +59,19 @@ func TestIntervalConstructionWithNegativeNumbersInverted(t *testing.T) {
 		t.Errorf("Expected error, got none")
 	}
 }
+
+func TestOverlapsFunctionWithOverlappingIntervals(t *testing.T) {
+	a, _ := New(1, 5)
+	b, _ := New(3, 6)
+	if !a.Overlaps(*b) {
+		t.Errorf("Expected intervals to overlap")
+	}
+}
+
+func TestOverlapsFunctionWithNonOverlappingIntervals(t *testing.T) {
+	a, _ := New(1, 5)
+	b, _ := New(6, 8)
+	if a.Overlaps(*b) {
+		t.Errorf("Expected intervals to not overlap")
+	}
+}
