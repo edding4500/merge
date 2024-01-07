@@ -38,6 +38,25 @@ function MergeTwo(interval1, interval2):
     return interval with start value of min(interval1.start, interval2.start) and end value of max(interval1.end, interval2.end)
 ```
 
+## Running the solution
+
+### Prerequisites
+
+To run the solution, you need to have Go installed on your system. You can find instructions on how to install Go [here](https://golang.org/doc/install).
+
+### Running the tests
+
+To run the tests, navigate to the root directory of the project and run the following command:
+
+```bash
+go test -v
+```
+
+To run the tests for Interval, navigate to the interval directory and run the following command:
+
+```bash
+go test -v
+```
 
 
 ### Time spent on the solution
@@ -71,6 +90,14 @@ Robustness was tested for the following cases:
 - input with intervals including negative values
 
 Both `Merge` and the `Interval` struct were tested for robustness. The tests can be found in the `merge_test.go` and `interval_test.go` files. Interval tests include tests for the `New` constructor function and the `Overlaps` method.
+
+### Coverage
+
+Test coverage for the `merge` function is 95% and for the `Interval` struct 100%. The coverage report can be reproduced by running the following command in the root directory or the interval directory:
+
+```bash
+go test -cover
+```
 
 ### How can robustness be guaranteed for large inputs?
 
