@@ -76,8 +76,8 @@ func Merge(intervals []interval.Interval) ([]interval.Interval, error) {
 	return merged, nil
 }
 
-// Takes two intervals and returns a merged interval
-// if the two intervals overlap. In case of an error, the returned
+// Takes two intervals and returns a merged interval.
+// In case of an error, the returned
 // error object reflects the error and is not nil.
 func MergeInterval(a, b interval.Interval) (*interval.Interval, error) {
 	return interval.New(
