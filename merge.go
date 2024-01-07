@@ -6,17 +6,10 @@ import (
 	"sort"
 )
 
-/**
-*
-*	`Merge` takes a list of intervals and returns a list of
-*	merged intervals, i.e. a list of intervals where all overlapping
-*	intervals are merged together. In case of an error,
-* the returned error object reflects the error and is not nil.
-*
-* @intervals: The list of intervals to be merged
-* @return: A list of merged intervals and an error object.
-*
- */
+// Takes a list of intervals and returns a list of
+// merged intervals, i.e. a list of intervals where all overlapping
+// intervals are merged together. In case of an error,
+// the returned error object reflects the error and is not nil.
 func Merge(intervals []interval.Interval) ([]interval.Interval, error) {
 	if len(intervals) == 0 {
 		return intervals, nil
@@ -83,17 +76,9 @@ func Merge(intervals []interval.Interval) ([]interval.Interval, error) {
 	return merged, nil
 }
 
-/**
-*
-*	`MergeInterval` takes two intervals and returns a merged interval
-*	if the two intervals overlap. In case of an error, the returned
-*	error object reflects the error and is not nil.
-*
-* @a: The first interval
-* @b: The second interval
-* @return: A merged interval and an error object.
-*
- */
+// Takes two intervals and returns a merged interval
+// if the two intervals overlap. In case of an error, the returned
+// error object reflects the error and is not nil.
 func MergeInterval(a, b interval.Interval) (*interval.Interval, error) {
 	return interval.New(
 		min(a.Start, b.Start),
